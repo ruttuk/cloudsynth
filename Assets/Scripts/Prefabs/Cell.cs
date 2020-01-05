@@ -33,11 +33,14 @@ public class Cell : MonoBehaviour
             if (!EventSystem.current.IsPointerOverGameObject())
             {
                 m_Renderer.material.color = Color.green;
-                Block current = MC.getBlockManager().placeCellBlock(m_Position, rowIndex);
-                MC.getDataJockey().UpdateSong(current, row, rowIndex);
+                if (MC.getDataJockey().IsSongLoaded())
+                {
+                    Block current = MC.getBlockManager().placeCellBlock(m_Position, row, rowIndex);
+                    MC.getDataJockey().UpdateSong(current, row, rowIndex, "ADD_BLOCK");
+                }
             }
         }
-        if(Input.GetMouseButtonUp(0))
+        else if(Input.GetMouseButtonUp(0))
         {
             m_Renderer.material.color = Color.magenta;
         }

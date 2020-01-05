@@ -345,6 +345,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 534527037}
+  - component: {fileID: 534527038}
   m_Layer: 0
   m_Name: Gameboard
   m_TagString: Untagged
@@ -366,6 +367,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &534527038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 534527036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0342b6f5ee915a419359a4ae2f78e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numRows: 50
+  rowSize: 10
+  rowSpacing: 3.1
+  cellPrefab: {fileID: 4582910505569350438, guid: 3267e930027ae0643b1641d0b3d173a4,
+    type: 3}
+  musicWallPrefab: {fileID: 3291174260766254472, guid: 2d9fea30ca5f9d8429cc4a2981dc4e53,
+    type: 3}
 --- !u!1 &593829190
 GameObject:
   m_ObjectHideFlags: 0
@@ -2118,14 +2138,9 @@ MonoBehaviour:
   toolbeltButtonPrefab: {fileID: 8956698762352120368, guid: 91bf79a49f31ebf48872eb8bae718515,
     type: 3}
   spawnPoint: {fileID: 1880325496}
-  cellPrefab: {fileID: 4582910505569350438, guid: 3267e930027ae0643b1641d0b3d173a4,
-    type: 3}
-  cellParent: {fileID: 534527037}
+  cellBlockParent: {fileID: 534527037}
   cellBlockPrefab: {fileID: 8199876653487724690, guid: d7cf1febb6f663b49908394e2bc8517e,
     type: 3}
-  numRows: 50
-  rowSize: 10
-  rowSpacing: 3.1
 --- !u!1 &1865126730
 GameObject:
   m_ObjectHideFlags: 0

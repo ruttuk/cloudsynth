@@ -50,16 +50,34 @@ public class DataJockey : MonoBehaviour
         return _currentSong;
     }
 
-    public void UpdateSong(Block block, int row, int rowIndex)
+    public void UpdateSong(Block block, int row, int rowIndex, string action)
     {
-        if (_currentSong != null)
+        if (IsSongLoaded())
         {
-            _currentSong.AddBlockToRow(block, row, rowIndex);
+            if (action.Equals("ADD_BLOCK"))
+            {
+                _currentSong.AddBlockToRow(block, row, rowIndex);
+            }
+            else if (action.Equals("DELETE_BLOCK"))
+            {
+                _currentSong.DeleteBlockFromRow(row, rowIndex);
+            }
             SaveSong(_currentSongName);
         }
         else
         {
             Debug.Log("No song loaded!");
         }
+    }
+
+    public bool IsSongLoaded()
+    {
+        return _currentSong != null;
+    }
+
+    public Block[] GetAllBlocksInRow(int row)
+    {
+        Row r = _currentSong.GetRowByIndex(row);
+        return r.getAllOccupiedBlocks();
     }
 }

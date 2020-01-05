@@ -41,4 +41,17 @@ public class Song
         Debug.Log($"Inserting in row {row}...");
         rows[row].AddNoteByIndex(rowIndex, block);
     }
+
+    public void DeleteBlockFromRow(int row, int rowIndex)
+    {
+        if(rows.Count > row)
+        {
+            Debug.Log($"Deleting at row {row}...");
+            rows[row].DeleteBlockByIndex(rowIndex);
+        }
+        else
+        {
+            Debug.Log($"Row {row} does not exist.");
+        }
+    }
 }
