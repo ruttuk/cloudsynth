@@ -8,6 +8,7 @@ public class Block
     public float x { get; set; }
     public float y { get; set; }
     public float z { get; set; }
+    public bool isLoopBlock;
 
     protected int index;
     protected string materialPath;
@@ -21,6 +22,8 @@ public class Block
         this.index = index;
         this.materialPath = materialPath;
         this.audioPath = audioPath;
+        // should eventually separate special blocks into sub-class of Block
+        isLoopBlock = false;
     }
 
     public int getIndex()

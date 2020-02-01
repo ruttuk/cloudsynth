@@ -20,6 +20,8 @@ public class MainMenu : MonoBehaviour
     private GameObject existingSongButton;
     [SerializeField]
     private Transform spawnPoint;
+    [SerializeField]
+    private Text TitleHeader;
 
     Emcee MC;
 
@@ -28,6 +30,7 @@ public class MainMenu : MonoBehaviour
         MC = Emcee.Instance;
     }
 
+    // should be set to true after a song is exited
     bool _alreadyLoaded = false;
 
     public void ShowEditModeInterface()
@@ -44,9 +47,11 @@ public class MainMenu : MonoBehaviour
 
     public void ShowMainMenu()
     {
+        HideCanvasGroup(toolbeltCanvasGroup);
         HideCanvasGroup(existingSongCanvasGroup);
         HideCanvasGroup(newSongCanvasGroup);
         ShowCanvasGroup(mainButtonsCanvasGroup);
+        ShowCanvasGroup(mainMenuCanvasGroup);
     }
 
     public void HideMainMenu()
@@ -62,7 +67,8 @@ public class MainMenu : MonoBehaviour
 
         if (!_alreadyLoaded)
         {
-            float spawnY;
+            float yOffset = 30f;
+            float spawnY = 0f;
             Vector3 spawnPos;
             GameObject spawnedButton;
 
@@ -72,7 +78,6 @@ public class MainMenu : MonoBehaviour
             for (int i = 0; i < numberOfExistingSongs; i++)
             {
                 string existingSongName = SavedSongs[i].Name;
-                spawnY = i * 30;
                 spawnPos = new Vector3(spawnPoint.position.x, -spawnY, spawnPoint.position.z);
                 spawnedButton = Instantiate(existingSongButton, spawnPos, spawnPoint.rotation);
                 spawnedButton.SetActive(true);
@@ -80,9 +85,44 @@ public class MainMenu : MonoBehaviour
                 // to get rid of the .save suffix
                 spawnedButton.GetComponentInChildren<Text>().text = existingSongName.Substring(0, existingSongName.Length - 5);
                 spawnedButton.GetComponentInChildren<Button>().onClick.AddListener(delegate { LoadExistingSong(existingSongName); });
+                spawnY += yOffset;
             }
             _alreadyLoaded = true;
         }
+    }
+
+    public void ExitButtonPressed()
+    {
+        Debug.Log("Exiting...");
+        // if exit button is pressed and main menu is loaded, quit the game.
+        // otherwise quit the song and return to main menu.
+
+        if (mainButtonsCanvasGroup.alpha == 1f)
+        {
+            Debug.Log("quitting game");
+            Application.Quit();
+        }
+        else
+        {
+            Debug.Log("first erase all spawned cell blocks, unload song from data, then show main menu - also change title header");
+            MC.getDataJockey().UnloadSong();
+            MC.getBlockManager().CleanUpCellBlocks();
+            ShowMainMenu();
+            UnloadExistingSongs();
+            TitleHeader.text = "cloudsynth";
+        }
+    }
+    // when the song is exited, the existing songs in the main menu should be reloaded in case a new song has been saved
+    private void UnloadExistingSongs()
+    {
+        int spawnedCells = spawnPoint.childCount;
+
+        for (int i = 0; i < spawnedCells; i++)
+        {
+            Destroy(spawnPoint.GetChild(i).gameObject);
+        }
+
+        _alreadyLoaded = false;
     }
 
     private void LoadExistingSong(string existingSongName)

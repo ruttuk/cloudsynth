@@ -9,6 +9,8 @@ public class DataJockey : MonoBehaviour
 {
     [SerializeField]
     private Text newSongInput;
+    [SerializeField]
+    private Text TitleHeader;
 
     Song _currentSong;
     string _currentSongName;
@@ -21,6 +23,11 @@ public class DataJockey : MonoBehaviour
         newSongName = newSongName.Replace(' ', '_');
         SaveSong(newSongName);
         _currentSongName = newSongName;
+    }
+
+    public void SetSongTitle()
+    {
+        TitleHeader.text = _currentSongName;
     }
 
     private void SaveSong(string newSongName)
@@ -42,12 +49,19 @@ public class DataJockey : MonoBehaviour
             file.Close();
             Debug.Log($"{oldSongName} Loaded!");
             _currentSongName = oldSongName.Substring(0, oldSongName.Length - 5);
+            SetSongTitle();
         }
         else
         {
             Debug.Log($"{oldSongName} does not exist!!!");
         }
         return _currentSong;
+    }
+
+    public void UnloadSong()
+    {
+        _currentSong = null;
+        _currentSongName = string.Empty;
     }
 
     public void UpdateSong(Block block, int row, int rowIndex, string action)

@@ -51,7 +51,7 @@
 				v2f o;
 
 				// add noise to vertices 
-				float noise = _Wind * cnoise(v.normal + _Time.y);
+				float noise = _Wind * cnoise(v.normal + _Time.x);
 				float4 nv = float4(v.vertex.xyz + noise * v.normal, v.vertex.w);
 				// move model's vertices to screen position 
 				o.vertex = UnityObjectToClipPos(nv);

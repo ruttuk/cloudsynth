@@ -23,7 +23,7 @@ public class Cell : MonoBehaviour
 
     void OnMouseEnter()
     {
-        m_Renderer.material.color = Color.magenta;
+       m_Renderer.material = Resources.Load<Material>("Materials/Blocks/" + MC.getBlockManager().getCurrentlySelectedBlock().getMaterial());
     }
 
     void OnMouseOver()
@@ -42,7 +42,7 @@ public class Cell : MonoBehaviour
         }
         else if(Input.GetMouseButtonUp(0))
         {
-            m_Renderer.material.color = Color.magenta;
+            //m_Renderer.material = Resources.Load<Material>("Materials/Blocks" + MC.getBlockManager().GetCurrentlySelected().getMaterial());
         }
     }
 

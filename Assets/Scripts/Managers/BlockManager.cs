@@ -17,15 +17,18 @@ public class BlockManager : MonoBehaviour
     [SerializeField]
     private GameObject cellBlockPrefab;
 
-    int toolbeltSize = 7;
+    int toolbeltSize = 8;
     Block[] toolbeltBlocks;
-    Material[] mats;
+    Material[] blockMaterials;
+    Material[] toolbeltIconMaterials;
+
     AudioClip[] audioClips;
     Block currentlySelected;
 
     private void Awake()
     {
-        mats = Resources.LoadAll<Material>("Materials/Blocks");
+        blockMaterials = Resources.LoadAll<Material>("Materials/Blocks");
+        toolbeltIconMaterials = Resources.LoadAll<Material>("Materials/UI");
         audioClips = Resources.LoadAll<AudioClip>("Audio/Etc");
 
         initializeToolbelt();
@@ -36,10 +39,14 @@ public class BlockManager : MonoBehaviour
     {
         toolbeltBlocks = new Block[toolbeltSize];
 
-        for (int i = 0; i < toolbeltSize; i++)
+        for (int i = 0; i < toolbeltSize - 1; i++)
         {
-            toolbeltBlocks[i] = new Block(-1, -1, -1, -1, mats[i].name, audioClips[i].name);
+            toolbeltBlocks[i] = new Block(-1, -1, -1, -1, toolbeltIconMaterials[i].name, audioClips[i].name);
         }
+
+        // special loop block at the end require special treatment for now
+        toolbeltBlocks[toolbeltSize - 1] = new Block(-1, -1, -1, -1, toolbeltIconMaterials[toolbeltSize - 1].name, "loop");
+        toolbeltBlocks[toolbeltSize - 1].isLoopBlock = true;
 
         currentlySelected = toolbeltBlocks[0];
     }
@@ -57,7 +64,7 @@ public class BlockManager : MonoBehaviour
             spawnedButton.SetActive(true);
             spawnedButton.transform.SetParent(spawnPoint, false);
             spawnedButton.GetComponentInChildren<Text>().text = currentBlock.getAudio();
-            spawnedButton.GetComponent<Image>().material = mats[i];
+            spawnedButton.GetComponent<Image>().material = toolbeltIconMaterials[i];
             spawnedButton.GetComponentInChildren<Button>().onClick.AddListener(delegate { setCurrentBlock(currentBlock); });
             spawnPos.x += 50f;
         }
@@ -113,7 +120,30 @@ public class BlockManager : MonoBehaviour
 
         Block saveBlock = new Block(cellBlockPosition.x, cellBlockPosition.y, cellBlockPosition.z, rowIndex, materialName, audioClipName);
 
+
+        // hack; ugh throwing up
+        if(audioClipName.Equals("loop"))
+        {
+            saveBlock.isLoopBlock = true;
+        }
+
         return saveBlock;
+    }
+
+    public Block getCurrentlySelectedBlock()
+    {
+        return currentlySelected;
+    }
+
+    // when a song is exited, destroy all spawned cell blocks
+    public void CleanUpCellBlocks()
+    {
+        int spawnedCells = cellBlockParent.childCount;
+
+        for(int i = 0; i < spawnedCells; i++)
+        {
+            Destroy(cellBlockParent.GetChild(i).gameObject);
+        }
     }
 
     private void instantiateCellBlock(CellBlock cellblock, Vector3 pos, GameObject spawnedCellBlock, string materialName, int row, int rowIndex)
