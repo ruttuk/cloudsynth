@@ -2,7 +2,7 @@
 
 Cloudsynth is a virtual midi controller where the sound comes from audio blocks that are placed on a grid.
 
-*How it works*
+~How it works~
 
 New songs can be created from the main menu and are saved automatically once in edit mode.
 
